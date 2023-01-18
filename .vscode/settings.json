@@ -1,0 +1,43 @@
+{
+  "eslint.alwaysShowStatus": true,
+  "eslint.format.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": [
+    "javascript"
+  ],
+  "eslint.workingDirectories": [
+    {
+      "mode": "location"
+    }
+  ],
+  "files.insertFinalNewline": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "sonarlint.connectedMode.connections.sonarqube": [
+    {
+      "connectionId": "mySonar",
+      "serverUrl": "https://sonarqubeapp-tqs.enel.com/",
+      "token": "a8d6d96b39c6142e75d5e0832d7cf03e219d68d6"
+    }
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "mySonar",
+    "projectKey": "esol-ap35699-lan-B2BSuite"
+  },
+  "eslint.run": "onType",
+  "typescript.workspaceSymbols.scope": "currentProject",
+  "javascript.suggest.completeFunctionCalls": true,
+  "editor.detectIndentation": false,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "diffEditor.codeLens": true,
+  "git.mergeEditor": false,
+  "merge-conflict.codeLens.enabled": true,
+  "merge-conflict.decorators.enabled": true,
+}

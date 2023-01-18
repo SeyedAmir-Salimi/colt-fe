@@ -1,15 +1,53 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ContextProvider from "context/context";
+import Login from "pages/login/Login";
+import { HOME, HOME_ROUTE, LOGIN, LOGIN_ROUTE } from "const";
+import Home from "pages/home/Home";
+import { ToastContainer } from 'react-toastify';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+
+const appRoutes = [
+  {
+    title: LOGIN,
+    key: LOGIN,
+    link: LOGIN_ROUTE,
+    exact: true,
+    component: <Login />,
+  },
+  {
+    title: HOME,
+    key: HOME,
+    link: HOME_ROUTE,
+    exact: true,
+    component: <Home />,
+  }
+];
+
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ContextProvider>
+          <div>
+            <Routes>
+            {appRoutes.map(({ key, link, component}) => (
+              <Route key={key} path={link} element={component}/>
+              ))}
+            </Routes>
+          </div>
+          <ToastContainer />
+        </ContextProvider>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
