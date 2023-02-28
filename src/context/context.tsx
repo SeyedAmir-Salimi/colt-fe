@@ -1,21 +1,45 @@
+import { ACTION_STATE, CARS, GAME_ID, GAME_STATE, PORT, ROUND, ROUND_CARD, SET, USERS, USERS_LAST_CHOSEN_CARDS, USER_PASSIVES } from 'const';
+import { IGameState } from 'const/custom';
 import React, {useState} from 'react';
-
+import { deepCopy } from 'utils';
 export const Context: any = React.createContext(null);
 
 interface props{
     children: JSX.Element | JSX.Element[]
 }
 const ContextProvider = ({ children }: props) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [contextValues, setContextValues] = useState<{
-      port: string | undefined
+      [PORT]: string | undefined,
+      [GAME_STATE]: IGameState
     }>
     ({
-      port: process.env.REACT_APP_GAME_VERSION
+      [PORT]: process.env.REACT_APP_GAME_VERSION,
+      [GAME_STATE]: {
+        [ACTION_STATE]: [],
+        [CARS]: null,
+        [ROUND]: null,
+        [SET]: null,
+        [GAME_ID]: null,
+        [ROUND_CARD]: null,
+        [USER_PASSIVES]: [],
+        [USERS]: [],
+        [USERS_LAST_CHOSEN_CARDS]:[]
+      }
     })
 
+    const addValueToState = (key: string , value: any)=>{
+      const copeState = deepCopy(contextValues)
+      copeState[key]= value
+      setContextValues(copeState)
+    }
+
+    const value = {
+      ...contextValues,
+      addValueToState
+    }
+
     return (
-      <Context.Provider value={contextValues}>
+      <Context.Provider value={value}>
         {children}
       </Context.Provider>
     );

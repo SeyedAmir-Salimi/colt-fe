@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import Button from 'components/button/Button'
 import { FaHatCowboy } from "react-icons/fa";
-import { ALL_CHARACTER, ButtonType } from 'const'
+import { ALL_CHARACTER, ButtonType, FIXED_SIZE } from 'const'
 import { IAllCharacter, Keyable } from 'const/custom';
-import CharactersSingle from 'components/charactersSingle/CharactersSingle';
+import CharactersSingle from 'components/wantedCharactersSingle/WantedCharactersSingle';
 import { useQuery } from "react-query";
 import api from 'api/api'
 import defaultQueryProps from 'api/configs';
@@ -28,8 +28,8 @@ const Login: React.FC = (): JSX.Element => {
 
 
     return (
-      <div className='h-screen w-screen bg-back-w bg-cover bg-no-repeat'>
-          <div className='flex h-[34em]'>
+      <div className={`${FIXED_SIZE} bg-coltExpress bg-cover bg-no-repeat`}>
+          <div className='flex h-[34em] justify-evenly'>
             {ALL_CHARACTER.map((cha: IAllCharacter)=> (
               <CharactersSingle key={cha?.name} character={cha} onClick={()=> setSelectedCharacter(cha?.name)} selectedCharacter={selectedCharacter}/>
               ))}
@@ -38,8 +38,8 @@ const Login: React.FC = (): JSX.Element => {
             <Button
               label={
                 <div className={`flex items-center`}>
-                  <p className='mr-2'>Start</p>
-                  <FaHatCowboy/>
+                  <p className='mr-2 font-west text-3xl'>Start</p>
+                  <FaHatCowboy className='text-3xl'/>
                 </div>}
                 type={!selectedCharacter ? ButtonType.secondary : ButtonType.primary}
                 onClick={()=> createGame()}

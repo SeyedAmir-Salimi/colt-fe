@@ -36,7 +36,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ContextProvider>
-          <div>
+          <div className='bg-black h-screen w-max'>
             <Routes>
             {appRoutes.map(({ key, link, component}) => (
               <Route key={key} path={link} element={component}/>
