@@ -2,14 +2,14 @@ import React from 'react';
 import { ButtonType } from 'const';
 
 interface IButton {
-  label: string | any
+  label: string | React.ReactNode
   onClick: () => void
   type?: ButtonType
   className?: string
   disabled?: boolean
 }
 
-const Button = ({ label, onClick, type, className = '', disabled=false}: IButton): JSX.Element => {
+const Button = ({ label, onClick, type, className = '', disabled = false }: IButton): JSX.Element => {
   let btnStyle = 'bg-viola text-white py-2 px-8 w-fit';
   if (type === ButtonType.secondary) btnStyle = 'bg-midGrey text-viola';
 

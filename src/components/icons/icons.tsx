@@ -1,5 +1,5 @@
 // import React from "react";
-import { GiRobber, GiPunchBlast, GiGunshot} from 'react-icons/gi';
+import { GiRobber, GiPunchBlast, GiGunshot } from 'react-icons/gi';
 import { BiMoveHorizontal, BiMoveVertical } from 'react-icons/bi';
 import { MdOutlineLocalPolice } from 'react-icons/md';
 
@@ -15,14 +15,13 @@ import { MdOutlineLocalPolice } from 'react-icons/md';
 //   </span>
 // );
 
-
 const exportedObject = {
   BiMoveHorizontal,
   BiMoveVertical,
   GiGunshot,
   GiPunchBlast,
   GiRobber,
-  MdOutlineLocalPolice,
+  MdOutlineLocalPolice
 };
 
 export default exportedObject;

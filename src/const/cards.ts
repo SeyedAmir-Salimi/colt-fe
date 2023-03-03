@@ -14,8 +14,8 @@ export const allSymbolsStyle = [
   {
     pos: 'right-bottom',
     classStyle: 'bottom-6 right-8'
-  },
-]
+  }
+];
 
 const exportedObject = {
   allSymbolsStyle

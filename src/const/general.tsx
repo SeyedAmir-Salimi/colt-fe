@@ -1,5 +1,6 @@
-import { IAllCharacter, Keyable, keyNullUndefined } from "./custom";
-import { GiRobber, GiPunchBlast, GiGunshot} from 'react-icons/gi';
+import React from 'react';
+import { IAllCharacter, keyNullUndefined } from './custom';
+import { GiRobber, GiPunchBlast, GiGunshot } from 'react-icons/gi';
 import { BiMoveHorizontal, BiMoveVertical } from 'react-icons/bi';
 import { MdOutlineLocalPolice } from 'react-icons/md';
 
@@ -25,12 +26,12 @@ export const STEAL = 'steal';
 export const SHOTTED_BY_MARSHAL = `shotted by ${MARSHAL}`;
 export const BEEN_SHOT = 'been shot';
 
-export const CAR_1 = 'car1'
-export const CAR_2 = 'car2'
-export const CAR_3 = 'car3'
-export const CAR_4 = 'car4'
-export const IN = 'in'
-export const OUT = 'out'
+export const CAR_1 = 'car1';
+export const CAR_2 = 'car2';
+export const CAR_3 = 'car3';
+export const CAR_4 = 'car4';
+export const IN = 'in';
+export const OUT = 'out';
 
 export const carsInfoArray = [
   {
@@ -73,31 +74,29 @@ export const carsInfoArray = [
     style: 'bottom-[34.5em] left-[75em]',
     position: OUT
   }
-]
+];
 
-export const findCardSymbol = (actionType: string | keyNullUndefined ,classStyle?: string)=> {
+export const findCardSymbol = (actionType: string | keyNullUndefined, classStyle?: string): React.ReactNode => {
   switch (actionType) {
-    case MOVE_FORWARD:
-      return <BiMoveHorizontal className={classStyle}/>
-    case MOVE_UP:
-      return <BiMoveVertical className={classStyle}/>
-    case MOVE_DOWN:
-      return <BiMoveVertical className={classStyle}/>
-    case PUNCH:
-      return <GiPunchBlast className={classStyle}/>
-    case SHOOT:
-      return <GiGunshot className={classStyle}/>
-    case STEAL:
-      return <GiRobber className={classStyle}/>
-    case MARSHAL:
-      return <MdOutlineLocalPolice className={classStyle}/>
-  
-    default:
-      return <h1 className={classStyle}>?</h1>;
+  case MOVE_FORWARD:
+    return <BiMoveHorizontal className={classStyle}/>;
+  case MOVE_UP:
+    return <BiMoveVertical className={classStyle}/>;
+  case MOVE_DOWN:
+    return <BiMoveVertical className={classStyle}/>;
+  case PUNCH:
+    return <GiPunchBlast className={classStyle}/>;
+  case SHOOT:
+    return <GiGunshot className={classStyle}/>;
+  case STEAL:
+    return <GiRobber className={classStyle}/>;
+  case MARSHAL:
+    return <MdOutlineLocalPolice className={classStyle}/>;
+
+  default:
+    return <h1 className={classStyle}>?</h1>;
   }
-}
-
-
+};
 
 export const ALL_CHARACTER: IAllCharacter[] = [
   {
@@ -129,41 +128,47 @@ export const ALL_CHARACTER: IAllCharacter[] = [
     name: DOC,
     shortDesc: 'Doc is the smartest Bandit of the party.',
     longDesc: 'At the beginning of each Round, draw seven cards instead of six.'
-  },
-]
+  }
+];
 
-export const characterWantedImages: Keyable = {
+export type CharactersEnumType = Record<string, string>;
+
+export const characterWantedImages: CharactersEnumType = {
   [BELLE]: 'bg-BelleWanted',
   [CHEYENNE]: 'bg-CheyenneWanted',
   [DJANGO]: 'bg-DjangoWanted',
   [DOC]: 'bg-DocWanted',
   [GHOST]: 'bg-GhostWanted',
   [TUCO]: 'bg-TucoWanted',
-}
+  [MARSHAL]: ''
+};
 
-export const characterImages: Keyable = {
+export const characterImages: CharactersEnumType = {
   [BELLE]: 'bg-Belle',
   [CHEYENNE]: 'bg-Cheyenne',
   [DJANGO]: 'bg-Django',
   [DOC]: 'bg-Doc',
   [GHOST]: 'bg-Ghost',
   [TUCO]: 'bg-Tuco',
-}
+  [MARSHAL]: 'bg-Sherif'
+};
 
-export const charactersColors: Keyable = {
+export const charactersColors: CharactersEnumType = {
   [BELLE]: 'belleViolet',
   [CHEYENNE]: 'cheyenneGreen',
   [DJANGO]: 'dJangoGray',
   [DOC]: 'docBlue',
   [GHOST]: 'ghostWhite',
   [TUCO]: 'tucoRed',
-}
+  [MARSHAL]: ''
+};
 
 export const ACTION_STATE = 'actionState';
 export const CARS = 'cars';
 export const GAME_ID = 'gameId';
 export const GAME_STATE = 'gameState';
 export const GEM = 'gem';
+export const SELECTED_PASSIVE = 'selectedPassive';
 export const PORT = 'port';
 export const PURSE = 'purse';
 export const ROUND = 'round';
@@ -188,6 +193,7 @@ const exportedObject = {
   FIXED_SIZE,
   GAME_ID,
   GEM,
+  SELECTED_PASSIVE,
   PORT,
   PURSE,
   ROUND_CARD,
@@ -197,7 +203,7 @@ const exportedObject = {
   STRONG_BOX,
   USER_PASSIVES,
   USERS_LAST_CHOSEN_CARDS,
-  USERS,
+  USERS
 };
 
 export default exportedObject;

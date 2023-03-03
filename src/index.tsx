@@ -1,18 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import ContextProvider from "context/context";
-import Login from "pages/login/Login";
-import { HOME, HOME_ROUTE, LOGIN, LOGIN_ROUTE } from "const";
-import Home from "pages/home/Home";
+import ContextProvider from 'context/context';
+import Login from 'pages/login/Login';
+import { HOME, HOME_ROUTE, LOGIN, LOGIN_ROUTE } from 'const';
+import Home from 'pages/home/Home';
 import { ToastContainer } from 'react-toastify';
+import 'react-popupbox/dist/react-popupbox.css';
 
 const queryClient = new QueryClient();
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 const appRoutes = [
   {
@@ -20,14 +21,14 @@ const appRoutes = [
     key: LOGIN,
     link: LOGIN_ROUTE,
     exact: true,
-    component: <Login />,
+    component: <Login />
   },
   {
     title: HOME,
     key: HOME,
     link: HOME_ROUTE,
     exact: true,
-    component: <Home />,
+    component: <Home />
   }
 ];
 
@@ -38,8 +39,8 @@ root.render(
         <ContextProvider>
           <div className='bg-black h-screen w-max'>
             <Routes>
-            {appRoutes.map(({ key, link, component}) => (
-              <Route key={key} path={link} element={component}/>
+              {appRoutes.map(({ key, link, component }) => (
+                <Route key={key} path={link} element={component}/>
               ))}
             </Routes>
           </div>
