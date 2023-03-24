@@ -1,11 +1,12 @@
 import PopUpList from 'components/popUp/PopUp';
 
-import { GEM, SELECTED_PASSIVE, PURSE, STRONG_BOX } from 'const';
-import { ITreasuresState, Keyable } from 'const/custom';
+import { GEM, SELECTED_PASSIVE, PURSE, STRONG_BOX, GAME_STATE } from 'const';
+import { IGameState, ITreasuresState, Keyable } from 'const/custom';
 import React, { useContext, useState } from 'react';
 import { isArrayLength } from 'utils';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { Context } from 'context/context';
+import { isStillChoosingCard } from 'utils/cardUtils';
 
 interface IJewelry {
   carJewelry: ITreasuresState[]
@@ -19,13 +20,16 @@ interface ITreasureList {
 
 const Jewelry: React.FC<IJewelry> = ({ carJewelry }): JSX.Element => {
   const {
-    addValueToState
+    addValueToState,
+    gameState
   } = useContext<{
     addValueToState: Keyable
+    [GAME_STATE]: IGameState
   }>(Context);
-
+  const { roundCard, set } = gameState ?? {};
   const [popUpType, setPopUpType] = useState<string>('');
   const ref = useDetectClickOutside({ onTriggered: () => setPopUpType('') });
+  const cantClickOnJewel = isStillChoosingCard(roundCard, set);
 
   const treasureList = [
     {
@@ -54,9 +58,9 @@ const Jewelry: React.FC<IJewelry> = ({ carJewelry }): JSX.Element => {
   );
 
   const jewelStyles = (i: number, icon: string): string => {
-    const commonStyles = `${icon} bg-cover cursor-pointer absolute`;
+    const commonStyles = `${icon} bg-cover ${!cantClickOnJewel ? 'cursor-pointer' : ''} absolute`;
     if (i === 0) return `${commonStyles}  z-10`;
-    if (i % 2 === 0) return `${commonStyles}  left-2 bottom-1}`;
+    if (i % 2 === 0) return `${commonStyles}  left-2 bottom-1}`; // to get if it's even
     return `${commonStyles} -left-2 bottom-1}`;
   };
 
@@ -69,7 +73,7 @@ const Jewelry: React.FC<IJewelry> = ({ carJewelry }): JSX.Element => {
             ? tr?.Jewelries.map((jewel, index) => (
               <div key={jewel?.id}>
                 <div key={jewel?.id} className={jewelStyles(index, tr?.icon)}
-                  onClick={() => jewelClick(tr)}/>
+                  onClick={!cantClickOnJewel ? () => jewelClick(tr) : () => {}}/>
               </div>
             ))
             : null}
@@ -80,7 +84,8 @@ const Jewelry: React.FC<IJewelry> = ({ carJewelry }): JSX.Element => {
                 onClick={() => {
                   selectJewelIdPassive(je?.id);
                   setPopUpType('');
-                }}>{`${tr.type} ${index + 1}`}</div>
+                }}>
+                {`${tr.type} ${index + 1}`}</div>
             ))}
           </PopUpList>
         </div>

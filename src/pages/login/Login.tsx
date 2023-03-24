@@ -46,7 +46,7 @@ const Login: React.FC = (): JSX.Element => {
           type={(!Boolean(selectedCharacter)) ? ButtonType.secondary : ButtonType.primary}
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onClick={async () => await createGame()}
-          disabled={!!Boolean(selectedCharacter)}
+          disabled={!Boolean(selectedCharacter)}
           className={`${(!Boolean(selectedCharacter)) ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         />
       </div>

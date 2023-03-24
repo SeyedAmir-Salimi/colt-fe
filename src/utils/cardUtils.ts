@@ -1,4 +1,4 @@
-import { ICardStates, Keyable } from 'const/custom';
+import { ICardStates, IRoundCards, Keyable, keyNullUndefined } from 'const/custom';
 import { isArrayLength } from './generalUtils';
 
 export const uniqCardsWithRepetition = (cards: ICardStates[] | Keyable): any => {
@@ -17,8 +17,11 @@ export const uniqCardsWithRepetition = (cards: ICardStates[] | Keyable): any => 
     return uniqCards;
   }
 };
+export const isStillChoosingCard = (roundCard: null | IRoundCards, set: number | keyNullUndefined): boolean => (
+  roundCard?.tunnelSituation?.length !== ((set ?? 1) - 1));
 
 const exportedObject = {
+  isStillChoosingCard,
   uniqCardsWithRepetition
 };
 

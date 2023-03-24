@@ -3,7 +3,6 @@ import { IAllCharacter, keyNullUndefined } from './custom';
 import { GiRobber, GiPunchBlast, GiGunshot } from 'react-icons/gi';
 import { BiMoveHorizontal, BiMoveVertical } from 'react-icons/bi';
 import { MdOutlineLocalPolice } from 'react-icons/md';
-
 export enum ButtonType {
   primary,
   secondary,
@@ -193,12 +192,12 @@ const exportedObject = {
   FIXED_SIZE,
   GAME_ID,
   GEM,
-  SELECTED_PASSIVE,
   PORT,
   PURSE,
   ROUND_CARD,
   ROUND,
   SCORE,
+  SELECTED_PASSIVE,
   SET,
   STRONG_BOX,
   USER_PASSIVES,

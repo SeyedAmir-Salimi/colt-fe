@@ -14,8 +14,6 @@ const toastOptions: object = {
 export const notifySuccess = (text: string): ReactNode => toast.success(text, toastOptions);
 
 export const notifyError = (text?: string): ReactNode => {
-  console.log('text', text);
-
   return (toast.error(text ?? 'An error occurred', toastOptions));
 };
 

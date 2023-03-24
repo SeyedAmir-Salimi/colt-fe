@@ -85,6 +85,11 @@ export interface IGameState {
   users: ICharacter[]
   usersLastChosenCards: ICardStates[]
 }
+export interface ICreateChooseCard {
+  gameId: string | undefined
+  userCardId?: string | null
+  isTakeCardFromDeck?: boolean
+}
 
 export type keyType = string | number | boolean | undefined | null
 export type keyNullUndefined = undefined | null

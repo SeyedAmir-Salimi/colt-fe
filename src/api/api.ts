@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { notifyError } from 'components/toast/Toast';
-import { Keyable } from 'const/custom';
+import { ICreateChooseCard, Keyable } from 'const/custom';
 
 const apiEndPoint: string | undefined = process.env.REACT_APP_API_ENDPOINT;
 
@@ -23,7 +23,19 @@ export const getGameState = async (gameId: string | undefined): Promise<Keyable>
     const { data } = await axios.get(
       `${apiEndPoint ?? '-'}/game/game-state/${gameId ?? '-'}`
     );
-    // console.log('string', JSON.stringify(data, null, 4));
+    return data;
+  } catch (err: Keyable) {
+    notifyError(err?.response?.data);
+  }
+};
+
+export const createChooseCard = async (body: ICreateChooseCard, onSuccessCallBack: any): Promise<Keyable> => {
+  try {
+    const { data } = await axios.post(
+      `${apiEndPoint ?? '-'}/action/chooseCards`,
+      body
+    );
+    if (Boolean(onSuccessCallBack)) onSuccessCallBack();
     return data;
   } catch (err: Keyable) {
     notifyError(err?.response?.data);
@@ -31,6 +43,7 @@ export const getGameState = async (gameId: string | undefined): Promise<Keyable>
 };
 
 const exportedObject = {
+  createChooseCard,
   createGame,
   getGameState
 };

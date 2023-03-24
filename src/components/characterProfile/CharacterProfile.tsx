@@ -45,7 +45,7 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
 
   return (
     <div className={`h-32 w-32 rounded-full text-center ${className} mt-5`}>
-      <h1 className={`text-2xl font-west ${!ai ? 'text-red' : 'text-black'}`}>
+      <h1 className={`text-2xl font-west ${!ai ? 'text-red' : 'text-viola'}`}>
         {`${name}`}
       </h1>
       <div className={`bg-no-repeat rounded-full border border-black h-32 ${characterImages[name] ?? ''}  bg-slate`}/>
