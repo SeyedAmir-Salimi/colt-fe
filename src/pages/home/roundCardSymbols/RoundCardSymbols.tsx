@@ -3,12 +3,15 @@ import { IGameState } from 'const/custom';
 import { Context } from 'context/context';
 import React, { useContext } from 'react';
 import { isItEmpty } from 'utils';
+import { isStillChoosingCard } from 'utils/cardUtils';
 import SingleRoundSymbol from './SingleRoundSymbol';
 
 const RoundCardSymbols: React.FC = (): JSX.Element => {
   const { gameState } = useContext<{ [GAME_STATE]: IGameState }>(Context);
-  const { roundCard, round } = gameState ?? {};
+  const { roundCard, round, set, minSet } = gameState ?? {};
   const { tunnelSituation } = roundCard ?? {};
+
+  const isShowChoseCardButton = isStillChoosingCard(roundCard, set);
 
   return (
     <div className='absolute bottom-20 p-2'>
@@ -19,7 +22,7 @@ const RoundCardSymbols: React.FC = (): JSX.Element => {
       <div className='flex p-2'>
         {(tunnelSituation != null) && !isItEmpty(tunnelSituation)
           ? tunnelSituation.map((rc, index) => (
-            <SingleRoundSymbol symbol={rc} index={index} key={index} set={gameState?.set}/>))
+            <SingleRoundSymbol symbol={rc} index={index} key={index} set={isShowChoseCardButton ? set : minSet}/>))
           : null}</div>
     </div>
   );

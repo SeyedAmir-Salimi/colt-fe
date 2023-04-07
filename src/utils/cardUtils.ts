@@ -20,6 +20,9 @@ export const uniqCardsWithRepetition = (cards: ICardStates[] | Keyable): any => 
 export const isStillChoosingCard = (roundCard: null | IRoundCards, set: number | keyNullUndefined): boolean => (
   roundCard?.tunnelSituation?.length !== ((set ?? 1) - 1));
 
+export const isInTunnel = (roundCard: null | IRoundCards, set: number | keyNullUndefined): boolean => isArrayLength(roundCard?.tunnelSituation ?? []) &&
+ !Boolean((roundCard?.tunnelSituation?.[(set ?? 1) - 1]));
+
 const exportedObject = {
   isStillChoosingCard,
   uniqCardsWithRepetition

@@ -32,6 +32,17 @@ export const CAR_4 = 'car4';
 export const IN = 'in';
 export const OUT = 'out';
 
+export const cardActionsLabel = {
+  [PUNCH]: 'Punch',
+  [MOVE_FORWARD]: 'Move',
+  [MOVE_UP]: 'Move',
+  [SHOOT]: 'Shoot',
+  [STEAL]: 'Steal',
+  [MARSHAL]: 'Marshal',
+  [BEEN_SHOT]: 'Been shot',
+  [SHOTTED_BY_MARSHAL]: `Shotted by ${MARSHAL}`
+};
+
 export const carsInfoArray = [
   {
     place: CAR_4,
@@ -180,29 +191,4 @@ export const USERS = 'users';
 export const USERS_LAST_CHOSEN_CARDS = 'usersLastChosenCards';
 
 export const FIXED_SIZE = 'w-[1920px] h-[1080px]';
-
-const exportedObject = {
-  ACTION_STATE,
-  ALL_CHARACTER,
-  ButtonType,
-  CARS,
-  charactersColors,
-  characterWantedImages,
-  findCardSymbol,
-  FIXED_SIZE,
-  GAME_ID,
-  GEM,
-  PORT,
-  PURSE,
-  ROUND_CARD,
-  ROUND,
-  SCORE,
-  SELECTED_PASSIVE,
-  SET,
-  STRONG_BOX,
-  USER_PASSIVES,
-  USERS_LAST_CHOSEN_CARDS,
-  USERS
-};
-
-export default exportedObject;
+export const NOTHING = 'nothing';

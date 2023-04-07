@@ -17,8 +17,13 @@ export const allSymbolsStyle = [
   }
 ];
 
-const exportedObject = {
-  allSymbolsStyle
-};
-
-export default exportedObject;
+export const twoSymbolsStyle = [
+  {
+    pos: 'top',
+    classStyle: 'top-6 left-10'
+  },
+  {
+    pos: 'bottom',
+    classStyle: 'bottom-6 left-10'
+  }
+];

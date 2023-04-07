@@ -25,7 +25,7 @@ const ContextProvider = ({ children }: props): React.ReactElement => {
   const [contextValues, setContextValues] = useState<{
       [PORT]: string | undefined
       [GAME_STATE]: IGameState
-      [SELECTED_PASSIVE]: string
+      [SELECTED_PASSIVE]: string | null
     }>({
       [PORT]: process.env.REACT_APP_GAME_VERSION,
       [GAME_STATE]: {
@@ -39,7 +39,7 @@ const ContextProvider = ({ children }: props): React.ReactElement => {
         [USERS]: [],
         [USERS_LAST_CHOSEN_CARDS]: []
       },
-      [SELECTED_PASSIVE]: ''
+      [SELECTED_PASSIVE]: null
     });
 
   const addValueToState = (key: string, value: any): void => {

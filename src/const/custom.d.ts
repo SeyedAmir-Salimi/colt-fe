@@ -25,6 +25,7 @@ export interface ICharacter {
   score: number
   treasures: IUserTreasure[]
   handCards: ICardStates[]
+  chosenCards: ICardStates[]
 }
 export interface ISign {
   ability: string
@@ -72,6 +73,7 @@ export interface ITreasuresState {
   place: string
   round: number
   treasuresValue: number
+  name: string
 }
 
 export interface IGameState {
@@ -79,9 +81,10 @@ export interface IGameState {
   cars: any
   round: number | keyNullUndefined
   set: number | keyNullUndefined
+  minSet?: number | keyNullUndefined
   gameId: string | keyNullUndefined
   roundCard: null | IRoundCards
-  userPassives: keyType[]
+  userPassives: any[]
   users: ICharacter[]
   usersLastChosenCards: ICardStates[]
 }
@@ -90,8 +93,12 @@ export interface ICreateChooseCard {
   userCardId?: string | null
   isTakeCardFromDeck?: boolean
 }
+export interface ICreatePlayCard {
+  gameId: string | undefined
+  passiveId: string | null
+}
 
-export type keyType = string | number | boolean | undefined | null
+export type keyType = object | string | number | boolean | undefined | null
 export type keyNullUndefined = undefined | null
 
 export type Keyable = Record<any>;

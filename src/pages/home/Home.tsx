@@ -1,24 +1,27 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import api from 'api/api';
 import defaultQueryProps from 'api/configs';
 import Button from 'components/button/Button';
-import Cabins from 'components/cabins/Cabins';
-import CharacterProfile from 'components/characterProfile/CharacterProfile';
-import PlayCards from 'components/playCards/PlayCards';
-import RoundCardSymbols from 'components/roundCardSymbols/RoundCardSymbols';
-import { ButtonType, FIXED_SIZE, GAME_STATE, MARSHAL } from 'const';
-import { ICardStates, ICharacter, ICreateChooseCard, Keyable } from 'const/custom';
+import Cabins from 'pages/home/cabins/Cabins';
+import CharacterProfile from 'pages/home/characterProfile/CharacterProfile';
+import PlayCards from 'pages/home/playCards/PlayCards';
+import RoundCardSymbols from 'pages/home/roundCardSymbols/RoundCardSymbols';
+import { ButtonType, FIXED_SIZE, GAME_STATE, MARSHAL, NOTHING, SELECTED_PASSIVE } from 'const';
+import { ICardStates, ICharacter, ICreateChooseCard, ICreatePlayCard, Keyable } from 'const/custom';
 import { Context } from 'context/context';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { isArrayLength, isItEmpty } from 'utils';
-import { isStillChoosingCard } from 'utils/cardUtils';
+import { isItEmpty } from 'utils';
+import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
 
 const Home: React.FC = (): JSX.Element => {
   const {
-    addValueToState
+    addValueToState,
+    selectedPassive
   } = useContext<{
     addValueToState: Keyable
+    [SELECTED_PASSIVE]: string | null
   }>(Context);
   const { id: gameId } = useParams();
   const [selectedCard, setSelectedCard] = useState<ICardStates | null>(null);
@@ -36,19 +39,17 @@ const Home: React.FC = (): JSX.Element => {
       enabled: Boolean(gameId)
     }
   );
-  const { users, roundCard, set } = gameState ?? {};
+  const { users, roundCard, set, userPassives } = gameState ?? {};
 
   const isShowChoseCardButton = isStillChoosingCard(roundCard, set);
 
-  const backGround = (isArrayLength(roundCard?.tunnelSituation) && isShowChoseCardButton &&
-  (!Boolean((roundCard.tunnelSituation?.[set - 1]))))
+  const backGround = isInTunnel(roundCard, set) && isShowChoseCardButton
     ? 'bg-TrainWestTunnel'
     : 'bg-TrainWest';
 
   const buttonSettings = {
     type: !Boolean(selectedCard) ? ButtonType.secondary : ButtonType.primary,
-    disabled: !Boolean(selectedCard),
-    className: !Boolean(selectedCard) ? 'cursor-not-allowed' : 'cursor-pointer'
+    disabled: !Boolean(selectedCard)
   };
 
   const { refetch: createChooseCard } = useQuery(
@@ -64,7 +65,6 @@ const Home: React.FC = (): JSX.Element => {
         () => {
           setIsTakeCardFromDeck(false);
           setSelectedCard(null);
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           fetchGameState();
         }
       );
@@ -76,6 +76,31 @@ const Home: React.FC = (): JSX.Element => {
     }
   );
 
+  const { refetch: createChooseActionOptionCard } = useQuery(
+    ['createChooseActionOptionCard@ChosenOptions'],
+    async (): Promise<Keyable> => {
+      const body: ICreatePlayCard = {
+        gameId: gameId ?? undefined,
+        passiveId: selectedPassive ?? NOTHING
+      };
+      const res = await api.createChooseActionOptionCard(
+        body,
+        () => {
+          addValueToState(SELECTED_PASSIVE, null);
+          fetchGameState();
+        }
+      );
+      return res;
+    },
+    {
+      ...defaultQueryProps,
+      enabled: false
+    }
+  );
+
+  const isNoPassiveToSelect = userPassives?.some((pass: { id: string }): boolean => pass?.id === NOTHING);
+
+  // todo, change move up to move up/down
   return (
     <div className={`${FIXED_SIZE} ${backGround} relative`}>
       {!isItEmpty(users)
@@ -90,12 +115,11 @@ const Home: React.FC = (): JSX.Element => {
           <div>
             <Button
               label={
-                <div className={'flex items-center'}>
-                  <p className='mr-2 font-west text-3xl'>chose card</p>
+                <div className='flex items-center'>
+                  <p className='mr-2 font-west text-3xl'>Chose card</p>
                 </div>}
-              onClick={() => {
-                void createChooseCard();
-              }}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onClick={createChooseCard}
               {...buttonSettings}
             />
           </div>
@@ -103,16 +127,30 @@ const Home: React.FC = (): JSX.Element => {
             <Button
               label={
                 <div className={'flex items-center'}>
-                  <p className='mr-2 font-west text-3xl'>get more cards</p>
+                  <p className='mr-2 font-west text-3xl'>Get more cards</p>
                 </div>}
               onClick={() => setIsTakeCardFromDeck(true)}
             />
           </div>
         </div>
+        : <div className='absolute ml-7 bottom-4 flex'>
+          <Button
+            label={!Boolean(isNoPassiveToSelect) ? 'Please chose your action' : 'There is nothing to chose'}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onClick={createChooseActionOptionCard}
+            type={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect)) ? ButtonType.secondary : ButtonType.primary}
+            disabled={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect))}
+          />
+        </div>
+      }
+
+      <RoundCardSymbols/>
+
+      {isShowChoseCardButton
+        ? <PlayCards selectedCard={selectedCard} setSelectedCard={setSelectedCard}/>
         : null
       }
-      <RoundCardSymbols/>
-      <PlayCards selectedCard={selectedCard} setSelectedCard={setSelectedCard}/>
+
       <Cabins/>
     </div>
   );

@@ -9,7 +9,6 @@ import PlayCardSingle from './PlayCardSingle';
 interface IPlayCardS {
   selectedCard: ICardStates | null
   setSelectedCard: (event: ICardStates | null) => void
-
 }
 
 const PlayCards: React.FC<IPlayCardS> = ({ selectedCard, setSelectedCard }): JSX.Element => {
@@ -27,6 +26,7 @@ const PlayCards: React.FC<IPlayCardS> = ({ selectedCard, setSelectedCard }): JSX
             key={rc?.id}
             selectedCard={selectedCard}
             setSelectedCard={setSelectedCard}
+            cardExtraStyle={selectedCard?.id === rc?.id ? 'mt-10' : 'mt-20'}
           />))
         : null}</div>
   );

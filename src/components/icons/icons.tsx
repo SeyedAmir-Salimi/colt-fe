@@ -2,6 +2,7 @@
 import { GiRobber, GiPunchBlast, GiGunshot } from 'react-icons/gi';
 import { BiMoveHorizontal, BiMoveVertical } from 'react-icons/bi';
 import { MdOutlineLocalPolice } from 'react-icons/md';
+import { FaArrowAltCircleDown } from 'react-icons/fa';
 
 // interface Icon {
 //   icon?: JSX.Element;
@@ -18,6 +19,7 @@ import { MdOutlineLocalPolice } from 'react-icons/md';
 const exportedObject = {
   BiMoveHorizontal,
   BiMoveVertical,
+  FaArrowAltCircleDown,
   GiGunshot,
   GiPunchBlast,
   GiRobber,

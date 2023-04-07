@@ -42,7 +42,21 @@ export const createChooseCard = async (body: ICreateChooseCard, onSuccessCallBac
   }
 };
 
+export const createChooseActionOptionCard = async (body: ICreateChooseCard, onSuccessCallBack: any): Promise<Keyable> => {
+  try {
+    const { data } = await axios.post(
+      `${apiEndPoint ?? '-'}/action/playCards`,
+      body
+    );
+    if (Boolean(onSuccessCallBack)) onSuccessCallBack();
+    return data;
+  } catch (err: Keyable) {
+    notifyError(err?.response?.data);
+  }
+};
+
 const exportedObject = {
+  createChooseActionOptionCard,
   createChooseCard,
   createGame,
   getGameState

@@ -3,7 +3,7 @@ import Button from 'components/button/Button';
 import { FaHatCowboy } from 'react-icons/fa';
 import { ALL_CHARACTER, ButtonType, FIXED_SIZE } from 'const';
 import { IAllCharacter } from 'const/custom';
-import CharactersSingle from 'components/wantedCharactersSingle/WantedCharactersSingle';
+import WantedCharactersSingle from 'pages/login/wantedCharactersSingle/WantedCharactersSingle';
 import { useQuery } from 'react-query';
 import api from 'api/api';
 import defaultQueryProps from 'api/configs';
@@ -33,7 +33,7 @@ const Login: React.FC = (): JSX.Element => {
     <div className={`${FIXED_SIZE} bg-coltExpress bg-cover bg-no-repeat`}>
       <div className='flex h-[34em] justify-evenly'>
         {ALL_CHARACTER.map((cha: IAllCharacter) => (
-          <CharactersSingle key={cha?.name} character={cha} onClick={() => setSelectedCharacter(cha?.name)} selectedCharacter={selectedCharacter}/>
+          <WantedCharactersSingle key={cha?.name} character={cha} onClick={() => setSelectedCharacter(cha?.name)} selectedCharacter={selectedCharacter}/>
         ))}
       </div>
       <div className='text-center mt-10'>
