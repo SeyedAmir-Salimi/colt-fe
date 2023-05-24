@@ -53,8 +53,8 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
   const isFirstSetAiGhost = ai && characterLastChosenCard?.set === 1 && name === GHOST;
   const isNotAiLastChosenCardInTunnel = isInTunnel(roundCard, characterLastChosenCard?.set) && ai;
 
-  const userAllChosenCards = users?.find(user => user?.nameOfCharacter === name);
-  const characterMinSetChosenCard = userAllChosenCards?.chosenCards?.find(card => card?.set === minSet);
+  const userAllChosenCards = users?.find(user => user?.nameOfCharacter === name)?.chosenCards;
+  const characterMinSetChosenCard = userAllChosenCards?.find(card => card?.set === minSet);
   const isChoseCardButton = isStillChoosingCard(roundCard, set);
 
   return (

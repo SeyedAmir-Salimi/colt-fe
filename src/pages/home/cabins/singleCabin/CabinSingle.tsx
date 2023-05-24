@@ -1,4 +1,4 @@
-import { GAME_STATE, IN, MOVE_DOWN, MOVE_UP, OUT, SELECTED_PASSIVE } from 'const';
+import { GAME_STATE, IN, MARSHAL, MOVE_DOWN, MOVE_UP, OUT, SELECTED_PASSIVE } from 'const';
 import { IGameState, Keyable } from 'const/custom';
 import { Context } from 'context/context';
 import React, { useContext } from 'react';
@@ -27,26 +27,30 @@ const CabinSingle: React.FC<ICabinSingle> = ({ place, style, position }): JSX.El
   const { roundCard, set, users, cars, userPassives } = gameState ?? {};
 
   const usersInThisCabin = isArrayLength(users)
-    ? users.filter(user => user?.place === place && user?.position === position)
+    ? users?.filter(user => user?.place === place && user?.position === position)
     : [];
   const carJewelry = cars?.[place]?.[position];
 
   const isUserStillChoosingCard = isStillChoosingCard(roundCard, set);
 
-  const user = users.find(user => !user?.ai);
+  const user = users?.find(user => !user?.ai);
 
   const passiveList = userPassives?.filter(passive => passive?.id);
 
-  const isPassiveHaveThisId = (prop: string): boolean => passiveList.some(passive => passive?.id === prop);
+  const isPassiveHaveThisId = (prop: string): boolean => passiveList?.some(passive => passive?.id === prop);
 
   const isPassiveMoveVertical = isPassiveHaveThisId(MOVE_UP) || isPassiveHaveThisId(MOVE_DOWN);
+  const isPassiveDetailMarshal = passiveList?.some(passive => passive?.details === MARSHAL);
 
   let passivePosition = '';
   if (isPassiveMoveVertical) {
     passivePosition = isPassiveHaveThisId(MOVE_UP) ? OUT : IN;
   }
-  const isCabinPassive = (position === passivePosition && user?.place === place) ||
-  (passiveList.some(passive => passive?.id === place) && user?.position === position);
+
+  const isCabinPassive = (
+    !isPassiveDetailMarshal && ((position === passivePosition && user?.place === place) ||
+     (passiveList?.some(passive => passive?.id === place) && user?.position === position))) ||
+  (isPassiveDetailMarshal && passiveList?.some(passive => passive?.id === place) && position === IN);
 
   let passiveId = '';
   if (isCabinPassive && isArrayLength(passiveList)) {
@@ -56,12 +60,12 @@ const CabinSingle: React.FC<ICabinSingle> = ({ place, style, position }): JSX.El
 
   return (
     <div
-      className={
-        `absolute
-      w-44
-      h-32
-      ${style}
-      ${isCabinPassive ? 'cursor-pointer' : 'cursor-not-allowed'}
+      className={`
+        absolute
+        w-44
+        h-32
+        ${style}
+        ${isCabinPassive ? 'cursor-pointer' : 'cursor-not-allowed'}
       `
       }
       onClick={(isCabinPassive && isArrayLength(passiveList)) ? () => addValueToState(SELECTED_PASSIVE, passiveId) : () => {}}

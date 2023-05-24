@@ -35,7 +35,7 @@ export const createChooseCard = async (body: ICreateChooseCard, onSuccessCallBac
       `${apiEndPoint ?? '-'}/action/chooseCards`,
       body
     );
-    if (Boolean(onSuccessCallBack)) onSuccessCallBack();
+    if (Boolean(onSuccessCallBack)) onSuccessCallBack(data);
     return data;
   } catch (err: Keyable) {
     notifyError(err?.response?.data);
@@ -48,7 +48,7 @@ export const createChooseActionOptionCard = async (body: ICreateChooseCard, onSu
       `${apiEndPoint ?? '-'}/action/playCards`,
       body
     );
-    if (Boolean(onSuccessCallBack)) onSuccessCallBack();
+    if (Boolean(onSuccessCallBack)) onSuccessCallBack(data);
     return data;
   } catch (err: Keyable) {
     notifyError(err?.response?.data);

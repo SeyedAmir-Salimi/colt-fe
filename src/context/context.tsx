@@ -48,9 +48,18 @@ const ContextProvider = ({ children }: props): React.ReactElement => {
     setContextValues(copeState);
   };
 
+  const addMoreValueToState = (body: any): void => {
+    const copeState = deepCopy(contextValues);
+    setContextValues({
+      ...copeState,
+      ...body
+    });
+  };
+
   const value = {
     ...contextValues,
-    addValueToState
+    addValueToState,
+    addMoreValueToState
   };
 
   return (

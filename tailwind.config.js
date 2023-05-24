@@ -37,7 +37,8 @@ module.exports = {
         Tuco: 'url(assets/tuco.png)',
         TucoWanted: 'url(assets/tuco-p.jpg)',
         TunnelSym: 'url(assets/tunnel-sym.png)',
-        wantedCard: 'url(assets/wanted-card.svg)'
+        wantedCard: 'url(assets/wanted-card.svg)',
+        spritSpinner: 'url(assets/sprit.gif)'
       },
       colors: {
         viola: '#5c45c3',

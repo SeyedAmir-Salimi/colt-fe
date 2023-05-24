@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import api from 'api/api';
 import defaultQueryProps from 'api/configs';
@@ -7,27 +8,32 @@ import CharacterProfile from 'pages/home/characterProfile/CharacterProfile';
 import PlayCards from 'pages/home/playCards/PlayCards';
 import RoundCardSymbols from 'pages/home/roundCardSymbols/RoundCardSymbols';
 import { ButtonType, FIXED_SIZE, GAME_STATE, MARSHAL, NOTHING, SELECTED_PASSIVE } from 'const';
-import { ICardStates, ICharacter, ICreateChooseCard, ICreatePlayCard, Keyable } from 'const/custom';
+import { ICardStates, ICharacter, ICreateChooseCard, ICreatePlayCard, IGameState, Keyable } from 'const/custom';
 import { Context } from 'context/context';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { isItEmpty } from 'utils';
 import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
+import Loader from 'components/loader/Loader';
 
 const Home: React.FC = (): JSX.Element => {
   const {
     addValueToState,
-    selectedPassive
+    selectedPassive,
+    addMoreValueToState,
+    gameState
   } = useContext<{
     addValueToState: Keyable
+    addMoreValueToState: Keyable
     [SELECTED_PASSIVE]: string | null
+    [GAME_STATE]: IGameState
   }>(Context);
   const { id: gameId } = useParams();
   const [selectedCard, setSelectedCard] = useState<ICardStates | null>(null);
   const [isTakeCardFromDeck, setIsTakeCardFromDeck] = useState<boolean>(false);
 
-  const { data: gameState, refetch: fetchGameState } = useQuery(
+  const { isFetching: isFetchGetGameState } = useQuery(
     ['getGameState@HomePage', gameId],
     async (): Promise<Keyable> => {
       const res = await api.getGameState(gameId);
@@ -52,7 +58,7 @@ const Home: React.FC = (): JSX.Element => {
     disabled: !Boolean(selectedCard)
   };
 
-  const { refetch: createChooseCard } = useQuery(
+  const { refetch: createChooseCard, isFetching: isFetchCreateChooseCard } = useQuery(
     ['createChooseCard@HomePage', isTakeCardFromDeck],
     async (): Promise<Keyable> => {
       const body: ICreateChooseCard = {
@@ -62,12 +68,19 @@ const Home: React.FC = (): JSX.Element => {
       };
       const res = await api.createChooseCard(
         body,
-        () => {
+        (data: IGameState) => {
           setIsTakeCardFromDeck(false);
           setSelectedCard(null);
-          fetchGameState();
+          addMoreValueToState({
+            [SELECTED_PASSIVE]: null,
+            [GAME_STATE]: data
+          });
+          // addValueToState(SELECTED_PASSIVE, null);
+          // fetchGameState();
         }
       );
+
+      // addValueToState(GAME_STATE, res);
       return res;
     },
     {
@@ -76,7 +89,7 @@ const Home: React.FC = (): JSX.Element => {
     }
   );
 
-  const { refetch: createChooseActionOptionCard } = useQuery(
+  const { refetch: createChooseActionOptionCard, isFetching: isFetchCreateChooseActionOptionCard } = useQuery(
     ['createChooseActionOptionCard@ChosenOptions'],
     async (): Promise<Keyable> => {
       const body: ICreatePlayCard = {
@@ -85,11 +98,16 @@ const Home: React.FC = (): JSX.Element => {
       };
       const res = await api.createChooseActionOptionCard(
         body,
-        () => {
-          addValueToState(SELECTED_PASSIVE, null);
-          fetchGameState();
+        (data: IGameState) => {
+          addMoreValueToState({
+            [SELECTED_PASSIVE]: null,
+            [GAME_STATE]: data
+          });
+          // addValueToState(SELECTED_PASSIVE, null);
+          // fetchGameState();
         }
       );
+      // addValueToState(GAME_STATE, res);
       return res;
     },
     {
@@ -100,9 +118,15 @@ const Home: React.FC = (): JSX.Element => {
 
   const isNoPassiveToSelect = userPassives?.some((pass: { id: string }): boolean => pass?.id === NOTHING);
 
-  // todo, change move up to move up/down
   return (
     <div className={`${FIXED_SIZE} ${backGround} relative`}>
+
+      <Loader isSpinning={(
+        isFetchGetGameState ||
+        isFetchCreateChooseCard ||
+        isFetchCreateChooseActionOptionCard
+      )}/>
+
       {!isItEmpty(users)
         ? <div className='flex justify-evenly'>
           {users.filter((user: ICharacter) => user?.nameOfCharacter !== MARSHAL).map((user: ICharacter) => (
@@ -118,7 +142,6 @@ const Home: React.FC = (): JSX.Element => {
                 <div className='flex items-center'>
                   <p className='mr-2 font-west text-3xl'>Chose card</p>
                 </div>}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={createChooseCard}
               {...buttonSettings}
             />
@@ -136,7 +159,6 @@ const Home: React.FC = (): JSX.Element => {
         : <div className='absolute ml-7 bottom-4 flex'>
           <Button
             label={!Boolean(isNoPassiveToSelect) ? 'Please chose your action' : 'There is nothing to chose'}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={createChooseActionOptionCard}
             type={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect)) ? ButtonType.secondary : ButtonType.primary}
             disabled={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect))}
