@@ -4,7 +4,7 @@ import { ICharacter, IGameState } from 'const/custom';
 import { Context } from 'context/context';
 import ChosenCard from './ChosenCard';
 import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
-import { isArrayLength } from 'utils';
+
 interface ICharacterProfile {
   character: ICharacter
   className?: string
@@ -29,7 +29,7 @@ const TressureSingle: React.FC<ITreasureSingle> = ({ treasure }) => {
 
 const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = '' }): JSX.Element => {
   const { gameState } = useContext<{ [GAME_STATE]: IGameState }>(Context);
-  const { usersLastChosenCards, roundCard, actionState, users, minSet, set } = gameState ?? {};
+  const { usersLastChosenCards, roundCard, users, minSet, set } = gameState ?? {};
   const { ai, nameOfCharacter: name, score, treasures } = character;
   const treasureList = [
     {
@@ -56,6 +56,7 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
   const userAllChosenCards = users?.find(user => user?.nameOfCharacter === name)?.chosenCards;
   const characterMinSetChosenCard = userAllChosenCards?.find(card => card?.set === minSet);
   const isChoseCardButton = isStillChoosingCard(roundCard, set);
+  console.log('characterLastChosenCard', Boolean(characterLastChosenCard) && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost);
 
   return (
     <div className={`h-32 w-32 text-center ${className} mt-5 relative`}>
@@ -63,7 +64,7 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
         {`${name}`}
       </h1>
 
-      {Boolean(characterLastChosenCard) && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost && !isArrayLength(actionState)
+      {Boolean(characterLastChosenCard) && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost
         ? <div className='absolute -left-24'>
           <ChosenCard
             card={characterLastChosenCard ?? null}
