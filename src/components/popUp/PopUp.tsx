@@ -6,6 +6,7 @@ interface PopUpListStyle {
   width?: string
   padding?: string
   marginTop?: string
+  hideBackGround?: boolean | undefined
 }
 interface PopUpListProps {
   isOpen: boolean
@@ -21,6 +22,7 @@ const PopUpList: React.FC<PopUpListProps> = ({ isOpen, children, popStyle }) => 
     w-${popStyle?.width ?? 32}
     p-${popStyle?.padding ?? 2}
   `;
+  const backStyle = `${(popStyle?.hideBackGround ?? false) ? '' : 'bg-white rounded-md shadow-md'}`;
   return (
     <>
       {isOpen
@@ -28,9 +30,7 @@ const PopUpList: React.FC<PopUpListProps> = ({ isOpen, children, popStyle }) => 
           className={`
           absolute
           ${popListStyle}
-          bg-white
-          rounded-md
-          shadow-md
+          ${backStyle}
           `}>
           {children}
         </div>

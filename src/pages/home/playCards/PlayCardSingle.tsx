@@ -21,7 +21,7 @@ const PlayCardSingle: React.FC<IPlayCardSingle> = ({ card, selectedCard, setSele
   return (
     <div>
       <div className={`relative text-center  ${cardExtraStyle ?? ''}`} onClick={(setSelectedCard != null) ? () => setSelectedCard(card) : () => {}}>
-        <WantedCard className='ml-3 w-40 h-52 cursor-pointer fill-darkGrey' ></WantedCard>
+        <WantedCard className='ml-3 w-40 h-52 cursor-pointer fill-darkGrey' />
         <h1 className='absolute top-[45%] w-full text-2xl cursor-pointer font-west'>{cardLabel}</h1>
         {allSymbolsStyle.map(sy => cardSymbol(sy))}
         <h1 className={'absolute -top-6  w-full text-2xl text-midGrey  cursor-pointer font-bold'}>{repitition > 1 ? `X${repitition}` : null}</h1>

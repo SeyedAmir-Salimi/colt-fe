@@ -102,3 +102,5 @@ export type keyType = object | string | number | boolean | undefined | null
 export type keyNullUndefined = undefined | null
 
 export type Keyable = Record<any>;
+
+export type typeAllInArray = string[] | boolean[] | object[]

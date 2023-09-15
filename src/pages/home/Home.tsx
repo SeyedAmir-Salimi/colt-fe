@@ -13,7 +13,7 @@ import { Context } from 'context/context';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { isItEmpty } from 'utils';
+import { getDifferentElements, isArrayLength, isItEmpty } from 'utils';
 import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
 import Loader from 'components/loader/Loader';
 
@@ -88,6 +88,36 @@ const Home: React.FC = (): JSX.Element => {
       enabled: !!isTakeCardFromDeck
     }
   );
+  const arrays = (oldGameState: IGameState, newGameState: IGameState): any => {
+    const oldGame = oldGameState;
+    const newArrays: IGameState[] = [];
+    const { round, minSet, userPassives, actionState, users, usersLastChosenCards } = newGameState ?? {};
+    if (isArrayLength(users)) {
+      users.forEach((user, i) => {
+        const { nameOfCharacter, treasures: newTreasures, id } = user ?? {};
+        const oldUser = oldGameState?.users.find(ur => ur?.id === id);
+        const { treasures: oldTreasures } = oldUser ?? {};
+
+        const findOtherUser = users.filter(ou => ou?.id !== user?.id);
+        const findUserLastChosenCard = usersLastChosenCards.filter(x => x?.owner === nameOfCharacter);
+        const actions = actionState.filter(act => act?.active === nameOfCharacter && act?.round === round && act?.set === minSet);
+
+        const differenceJewelry = getDifferentElements([newTreasures ?? [], oldTreasures ?? []]);
+
+        newArrays.push({
+          ...oldGame,
+          minSet,
+          round,
+          set,
+          users: [...findOtherUser, user],
+          userPassives,
+          usersLastChosenCards: [...oldGame?.usersLastChosenCards, ...findUserLastChosenCard],
+          actionState: [...oldGame?.actionState, ...actions],
+          cars: []
+        });
+      });
+    }
+  };
 
   const { refetch: createChooseActionOptionCard, isFetching: isFetchCreateChooseActionOptionCard } = useQuery(
     ['createChooseActionOptionCard@ChosenOptions'],

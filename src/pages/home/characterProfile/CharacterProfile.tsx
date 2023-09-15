@@ -4,6 +4,7 @@ import { ICharacter, IGameState } from 'const/custom';
 import { Context } from 'context/context';
 import ChosenCard from './ChosenCard';
 import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
+import ActionCards from './ActionCards';
 
 interface ICharacterProfile {
   character: ICharacter
@@ -56,7 +57,6 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
   const userAllChosenCards = users?.find(user => user?.nameOfCharacter === name)?.chosenCards;
   const characterMinSetChosenCard = userAllChosenCards?.find(card => card?.set === minSet);
   const isChoseCardButton = isStillChoosingCard(roundCard, set);
-  console.log('characterLastChosenCard', Boolean(characterLastChosenCard) && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost);
 
   return (
     <div className={`h-32 w-32 text-center ${className} mt-5 relative`}>
@@ -64,7 +64,7 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
         {`${name}`}
       </h1>
 
-      {Boolean(characterLastChosenCard) && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost
+      {Boolean(characterLastChosenCard) && isChoseCardButton && !isNotAiLastChosenCardInTunnel && !isFirstSetAiGhost
         ? <div className='absolute -left-24'>
           <ChosenCard
             card={characterLastChosenCard ?? null}
@@ -72,7 +72,6 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
         </div>
         : null
       }
-
       {(!isChoseCardButton && characterMinSetChosenCard != null)
         ? <div className='absolute -left-24'>
           <ChosenCard
@@ -80,6 +79,10 @@ const CharacterProfile: React.FC<ICharacterProfile> = ({ character, className = 
           />
         </div>
         : null}
+
+      <div className='absolute left-28'>
+        <ActionCards character={character}/>
+      </div>
 
       <div className={`bg-no-repeat rounded-full border border-black h-32 ${characterImages[name] ?? ''}  bg-slate`}/>
       <div className='flex justify-center'>

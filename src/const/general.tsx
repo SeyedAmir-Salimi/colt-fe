@@ -1,8 +1,9 @@
 import React from 'react';
 import { IAllCharacter, keyNullUndefined } from './custom';
-import { GiRobber, GiPunchBlast, GiGunshot } from 'react-icons/gi';
+import { GiRobber, GiPunchBlast, GiGunshot, GiDiceSixFacesThree } from 'react-icons/gi';
 import { BiMoveHorizontal, BiMoveVertical } from 'react-icons/bi';
 import { MdOutlineLocalPolice } from 'react-icons/md';
+
 export enum ButtonType {
   primary,
   secondary,
@@ -24,6 +25,7 @@ export const SHOOT = 'shoot';
 export const STEAL = 'steal';
 export const SHOTTED_BY_MARSHAL = `shotted by ${MARSHAL}`;
 export const BEEN_SHOT = 'been shot';
+export const THREE_MORE = '3more';
 
 export const CAR_1 = 'car1';
 export const CAR_2 = 'car2';
@@ -102,6 +104,8 @@ export const findCardSymbol = (actionType: string | keyNullUndefined, classStyle
     return <GiRobber className={classStyle}/>;
   case MARSHAL:
     return <MdOutlineLocalPolice className={classStyle}/>;
+  case THREE_MORE:
+    return <GiDiceSixFacesThree className={classStyle}/>;
 
   default:
     return <h1 className={classStyle}>?</h1>;

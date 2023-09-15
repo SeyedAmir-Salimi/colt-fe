@@ -13,11 +13,9 @@ const ChosenCard: React.FC<IChosenCard> = ({ card }): JSX.Element => {
   );
 
   return (
-    <div>
-      <div className={'relative text-center'} >
-        <WantedCard className='ml-3 w-20 h-32 cursor-pointer fill-darkGrey' ></WantedCard>
-        {twoSymbolsStyle.map(two => cardSymbol(two))}
-      </div>
+    <div className='relative text-center' >
+      <WantedCard className='ml-3 w-20 h-32 cursor-pointer fill-darkGrey' />
+      {twoSymbolsStyle.map(two => cardSymbol(two))}
     </div>
   );
 };
