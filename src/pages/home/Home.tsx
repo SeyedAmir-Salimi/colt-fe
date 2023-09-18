@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import api from 'api/api';
 import defaultQueryProps from 'api/configs';
 import Button from 'components/button/Button';
@@ -75,12 +73,9 @@ const Home: React.FC = (): JSX.Element => {
             [SELECTED_PASSIVE]: null,
             [GAME_STATE]: data
           });
-          // addValueToState(SELECTED_PASSIVE, null);
-          // fetchGameState();
         }
       );
 
-      // addValueToState(GAME_STATE, res);
       return res;
     },
     {
@@ -172,6 +167,7 @@ const Home: React.FC = (): JSX.Element => {
                 <div className='flex items-center'>
                   <p className='mr-2 font-west text-3xl'>Chose card</p>
                 </div>}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={createChooseCard}
               {...buttonSettings}
             />
@@ -189,6 +185,7 @@ const Home: React.FC = (): JSX.Element => {
         : <div className='absolute ml-7 bottom-4 flex'>
           <Button
             label={!Boolean(isNoPassiveToSelect) ? 'Please chose your action' : 'There is nothing to chose'}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onClick={createChooseActionOptionCard}
             type={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect)) ? ButtonType.secondary : ButtonType.primary}
             disabled={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect))}
