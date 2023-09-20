@@ -13,7 +13,7 @@ interface ICabinSingle {
   style: string
   position: string
 }
-// todo add loader on start game API call
+
 const CabinSingle: React.FC<ICabinSingle> = ({ place, style, position }): JSX.Element => {
   const {
     addValueToState,

@@ -30,6 +30,8 @@ const Home: React.FC = (): JSX.Element => {
   const { id: gameId } = useParams();
   const [selectedCard, setSelectedCard] = useState<ICardStates | null>(null);
   const [isTakeCardFromDeck, setIsTakeCardFromDeck] = useState<boolean>(false);
+  const [isCreatingChooseCard, setIsCreatingChooseCard] = useState<boolean>(false);
+  const [isCreateChooseActionOptionCard, setIsCreateChooseActionOptionCard] = useState<boolean>(false);
 
   const { isFetching: isFetchGetGameState } = useQuery(
     ['getGameState@HomePage', gameId],
@@ -56,8 +58,8 @@ const Home: React.FC = (): JSX.Element => {
     disabled: !Boolean(selectedCard)
   };
 
-  const { refetch: createChooseCard, isFetching: isFetchCreateChooseCard } = useQuery(
-    ['createChooseCard@HomePage', isTakeCardFromDeck],
+  const { isFetching: isFetchCreateChooseCard } = useQuery(
+    ['createChooseCard@HomePage', isTakeCardFromDeck, isCreatingChooseCard],
     async (): Promise<Keyable> => {
       const body: ICreateChooseCard = {
         gameId,
@@ -68,6 +70,7 @@ const Home: React.FC = (): JSX.Element => {
         body,
         (data: IGameState) => {
           setIsTakeCardFromDeck(false);
+          setIsCreatingChooseCard(false);
           setSelectedCard(null);
           addMoreValueToState({
             [SELECTED_PASSIVE]: null,
@@ -80,7 +83,7 @@ const Home: React.FC = (): JSX.Element => {
     },
     {
       ...defaultQueryProps,
-      enabled: !!isTakeCardFromDeck
+      enabled: !!isTakeCardFromDeck || !!isCreatingChooseCard
     }
   );
   const arrays = (oldGameState: IGameState, newGameState: IGameState): any => {
@@ -114,8 +117,8 @@ const Home: React.FC = (): JSX.Element => {
     }
   };
 
-  const { refetch: createChooseActionOptionCard, isFetching: isFetchCreateChooseActionOptionCard } = useQuery(
-    ['createChooseActionOptionCard@ChosenOptions'],
+  const { isFetching: isFetchCreateChooseActionOptionCard } = useQuery(
+    ['createChooseActionOptionCard@ChosenOptions', isCreateChooseActionOptionCard],
     async (): Promise<Keyable> => {
       const body: ICreatePlayCard = {
         gameId: gameId ?? undefined,
@@ -124,6 +127,7 @@ const Home: React.FC = (): JSX.Element => {
       const res = await api.createChooseActionOptionCard(
         body,
         (data: IGameState) => {
+          setIsCreateChooseActionOptionCard(false);
           addMoreValueToState({
             [SELECTED_PASSIVE]: null,
             [GAME_STATE]: data
@@ -137,7 +141,7 @@ const Home: React.FC = (): JSX.Element => {
     },
     {
       ...defaultQueryProps,
-      enabled: false
+      enabled: !!isCreateChooseActionOptionCard
     }
   );
 
@@ -167,8 +171,7 @@ const Home: React.FC = (): JSX.Element => {
                 <div className='flex items-center'>
                   <p className='mr-2 font-west text-3xl'>Chose card</p>
                 </div>}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onClick={createChooseCard}
+              onClick={() => setIsCreatingChooseCard(true)}
               {...buttonSettings}
             />
           </div>
@@ -185,8 +188,7 @@ const Home: React.FC = (): JSX.Element => {
         : <div className='absolute ml-7 bottom-4 flex'>
           <Button
             label={!Boolean(isNoPassiveToSelect) ? 'Please chose your action' : 'There is nothing to chose'}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onClick={createChooseActionOptionCard}
+            onClick={() => setIsCreateChooseActionOptionCard(true)}
             type={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect)) ? ButtonType.secondary : ButtonType.primary}
             disabled={(!Boolean(selectedPassive) && !Boolean(isNoPassiveToSelect))}
           />

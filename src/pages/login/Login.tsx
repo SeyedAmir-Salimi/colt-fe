@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'components/button/Button';
 import { FaHatCowboy } from 'react-icons/fa';
 import { ALL_CHARACTER, ButtonType, FIXED_SIZE } from 'const';
-import { IAllCharacter } from 'const/custom';
+import { IAllCharacter, IGameState } from 'const/custom';
 import WantedCharactersSingle from 'pages/login/wantedCharactersSingle/WantedCharactersSingle';
 import { useQuery } from 'react-query';
 import api from 'api/api';
@@ -13,22 +13,23 @@ import Loader from 'components/loader/Loader';
 const Login: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+  const [isCreateGame, setIsCreateGame] = useState<boolean>(false);
 
-  const { refetch: createGame, data: gameId, isFetching: isLoadingCreateGame } = useQuery(
+  const { isFetching: isLoadingCreateGame } = useQuery(
     ['createGame@Login'],
     async (): Promise<string | undefined> => {
-      const { gameId: resultGameId } = await api.createGame(selectedCharacter);
+      const { gameId: resultGameId } = await api.createGame(selectedCharacter,
+        (data: IGameState) => {
+          navigate(`/${data?.gameId ?? ''}`);
+          setIsCreateGame(false);
+        });
       return resultGameId;
     },
     {
       ...defaultQueryProps,
-      enabled: false
+      enabled: !!isCreateGame
     }
   );
-
-  useEffect(() => {
-    if (Boolean(gameId)) navigate(`/${gameId ?? ''}`);
-  }, [gameId]);
 
   return (
     <>
@@ -50,8 +51,8 @@ const Login: React.FC = (): JSX.Element => {
                 <FaHatCowboy className='text-3xl'/>
               </div>}
             type={(!Boolean(selectedCharacter)) ? ButtonType.secondary : ButtonType.primary}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onClick={async () => await createGame()}
+
+            onClick={() => setIsCreateGame(true)}
             disabled={!Boolean(selectedCharacter)}
             className={`${(!Boolean(selectedCharacter)) ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           />

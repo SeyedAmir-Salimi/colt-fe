@@ -4,7 +4,7 @@ import { ICreateChooseCard, Keyable } from 'const/custom';
 
 const apiEndPoint: string | undefined = process.env.REACT_APP_API_ENDPOINT;
 
-export const createGame = async (userCharacter: string | null): Promise<Keyable> => {
+export const createGame = async (userCharacter: string | null, onSuccessCallBack: any): Promise<Keyable> => {
   try {
     const { data } = await axios.post(
       `${apiEndPoint ?? '-'}/game/start`,
@@ -12,6 +12,7 @@ export const createGame = async (userCharacter: string | null): Promise<Keyable>
         userCharacter
       }
     );
+    if (Boolean(onSuccessCallBack)) onSuccessCallBack(data);
     return data;
   } catch (err: Keyable) {
     notifyError(err?.response?.data);

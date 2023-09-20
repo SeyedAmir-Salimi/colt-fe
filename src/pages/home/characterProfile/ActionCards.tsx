@@ -21,7 +21,6 @@ const ActionCards: React.FC<IActionCards> = ({ character }): JSX.Element => {
   const characterActionCards = actionState?.filter(ac => (ac?.active === character?.nameOfCharacter) || (ac?.passive === character?.nameOfCharacter && ac?.active === MARSHAL)); ;
   const maxRound = getMax(characterActionCards, (x: { round: number }) => x?.round);
   const lastActions = characterActionCards.filter(lac => lac?.round === maxRound && lac?.set === (Number(minSet) - 1));
-  if (character?.nameOfCharacter === CHEYENNE) console.log('characterActionCards', { characterActionCards, maxRound });
 
   const SingleActionCard: React.FC<ISingleActionCards> = ({ actionCardInfo, backColor }): JSX.Element => {
     const isThreeMore = actionCardInfo?.action === THREE_MORE;
