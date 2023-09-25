@@ -10,8 +10,8 @@ import { ICardStates, ICharacter, ICreateChooseCard, ICreatePlayCard, IGameState
 import { Context } from 'context/context';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import { getDifferentElements, isArrayLength, isItEmpty } from 'utils';
+import { useParams, useNavigate } from 'react-router-dom';
+import { isItEmpty } from 'utils';
 import { isInTunnel, isStillChoosingCard } from 'utils/cardUtils';
 import Loader from 'components/loader/Loader';
 
@@ -32,6 +32,7 @@ const Home: React.FC = (): JSX.Element => {
   const [isTakeCardFromDeck, setIsTakeCardFromDeck] = useState<boolean>(false);
   const [isCreatingChooseCard, setIsCreatingChooseCard] = useState<boolean>(false);
   const [isCreateChooseActionOptionCard, setIsCreateChooseActionOptionCard] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const { isFetching: isFetchGetGameState } = useQuery(
     ['getGameState@HomePage', gameId],
@@ -86,36 +87,6 @@ const Home: React.FC = (): JSX.Element => {
       enabled: !!isTakeCardFromDeck || !!isCreatingChooseCard
     }
   );
-  const arrays = (oldGameState: IGameState, newGameState: IGameState): any => {
-    const oldGame = oldGameState;
-    const newArrays: IGameState[] = [];
-    const { round, minSet, userPassives, actionState, users, usersLastChosenCards } = newGameState ?? {};
-    if (isArrayLength(users)) {
-      users.forEach((user, i) => {
-        const { nameOfCharacter, treasures: newTreasures, id } = user ?? {};
-        const oldUser = oldGameState?.users.find(ur => ur?.id === id);
-        const { treasures: oldTreasures } = oldUser ?? {};
-
-        const findOtherUser = users.filter(ou => ou?.id !== user?.id);
-        const findUserLastChosenCard = usersLastChosenCards.filter(x => x?.owner === nameOfCharacter);
-        const actions = actionState.filter(act => act?.active === nameOfCharacter && act?.round === round && act?.set === minSet);
-
-        const differenceJewelry = getDifferentElements([newTreasures ?? [], oldTreasures ?? []]);
-
-        newArrays.push({
-          ...oldGame,
-          minSet,
-          round,
-          set,
-          users: [...findOtherUser, user],
-          userPassives,
-          usersLastChosenCards: [...oldGame?.usersLastChosenCards, ...findUserLastChosenCard],
-          actionState: [...oldGame?.actionState, ...actions],
-          cars: []
-        });
-      });
-    }
-  };
 
   const { isFetching: isFetchCreateChooseActionOptionCard } = useQuery(
     ['createChooseActionOptionCard@ChosenOptions', isCreateChooseActionOptionCard],
@@ -155,6 +126,15 @@ const Home: React.FC = (): JSX.Element => {
         isFetchCreateChooseCard ||
         isFetchCreateChooseActionOptionCard
       )}/>
+
+      <Button
+        className='absolute top-2 right-2'
+        label={
+          <div className='flex items-center'>
+            <p className='font-west text-3xl'>Start new game</p>
+          </div>}
+        onClick={() => navigate('/')}
+      />
 
       {!isItEmpty(users)
         ? <div className='flex justify-evenly'>
